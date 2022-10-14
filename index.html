@@ -1,26 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- displays site properly based on user's device -->
 
   <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
-  
+  <link href="./normalize.css" rel="stylesheet">
+  <link href="./style.css" rel="stylesheet">
+  <script src="./main.js" defer></script>
+
   <title>Frontend Mentor | Calculator app</title>
-
-  <!-- Feel free to remove these styles or customise in your own stylesheet 👍 -->
-  <style>
-    .attribution { font-size: 11px; text-align: center; }
-    .attribution a { color: hsl(228, 45%, 44%); }
-  </style>
 </head>
+
 <body>
+  <main>
+    <div class="header">
+      <div class="calc">
+        <span>calc</span>
+      </div>
+      <div class="theme-container">
+        <span class="theme">THEME</span>
+        <div class="theme-numbers">
+          <span>1</span>
+          <span>2</span>
+          <span>3</span>
+        </div>
+        <div class="theme-rail">
+          <button class="theme-button" value="1"></button>
+        </div>
+      </div>
+    </div>
 
 
-  
-  <div class="attribution">
-    Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 
+    <div class="result">
+      <h1 class="result-value"></h1>
+    </div>
+
+    <div class="keypad">
+      <button class="keypad-btn numbers" id="key-7" value="7">7</button>
+      <button class="keypad-btn numbers" id="key-8" value="8">8</button>
+      <button class="keypad-btn numbers" id="key-9" value="9">9</button>
+      <button class="keypad-btn numbers" id="key-del" value="del">DEL</button>
+      <button class="keypad-btn numbers" id="key-4" value="4">4</button>
+      <button class="keypad-btn numbers" id="key-5" value="5">5</button>
+      <button class="keypad-btn numbers" id="key-6" value="6">6</button>
+      <button class="keypad-btn btn-plus" id="key-plus" value="+">+</button>
+      <button class="keypad-btn numbers" id="key-1" value="1">1</button>
+      <button class="keypad-btn numbers" id="key-2" value="2">2</button>
+      <button class="keypad-btn numbers" id="key-3" value="3">3</button>
+      <button class="keypad-btn btn-minus" id="key-minus" value="-" >-</button>
+      <button class="keypad-btn btn-dot" id="key-dot" value=".">.</button>
+      <button class="keypad-btn numbers" id="key-0" value="0">0</button>
+      <button class="keypad-btn btn-divide" id="key-divide" value="/">/</button>
+      <button class="keypad-btn btn-x" id="key-multiply" value="*">x</button>
+      <button class="keypad-btn btn-reset" id="key-reset">RESET</button>
+      <button class="keypad-btn btn-equal" id="key-equal">=</button>
+
+    </div>
+
+
+
+  </main>
+  <footer class="attribution">
+    Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>.
     Coded by <a href="#">Your Name Here</a>.
-  </div>
+  </footer>
 </body>
+
 </html>
