@@ -94,11 +94,11 @@ let themeRail = document.getElementsByClassName('theme-rail')[0];
 let resultPannel = document.getElementsByClassName('result')[0];
 let keypad = document.getElementsByClassName('keypad')[0];
 let keypadButtons = document.getElementsByClassName('keypad-btn');
-let btnDel = document.getElementById('key-del');
+let btnDel = document.getElementById('key-Backspace');
 let btnReset = document.getElementById('key-reset');
-let btnEqual = document.getElementById('key-equal');
+let btnEqual = document.getElementById('key-Enter');
 
-
+themeButton.addEventListener('keydown',(e) => {e.preventDefault()})
 
 // Change Theme event Handler :
 // helper function that only changes the styles
@@ -139,20 +139,232 @@ const changeStyles = (nextTheme) => {
 // the event handler that changes the theme
 function changeTheme(e) {
 
-    const currentTheme = Number(e.target.value);
+    const currentTheme = Number(themeButton.value);
     let nextTheme = currentTheme;
 
     currentTheme === 3 ? nextTheme = 1 : nextTheme += 1; //setting next Theme number
     // changing the current theme number state
-    e.target.value = nextTheme.toString();
+    themeButton.value = nextTheme;
     // Changing the Page Styles : 
     return changeStyles(nextTheme)
 }
 
-themeButton.addEventListener('click', changeTheme)
+themeRail.addEventListener('click',changeTheme)
 //------------------- end Themes Change --------------//
+///////////////////////////////////////////////////////////////////////////////////////////
 
+
+// Binding Keys for a good user experience //
+
+document.addEventListener('keydown', (event) => {
+    try {
+        document.getElementById(`key-${event.key}`).click()
+    } catch {
+        // just pass
+    }
+
+})
 //------------------- Doing Calculations -------------//
+let equationScreen = document.getElementById('previous-result'); // the previous calculated value
+let resultScreen = document.getElementById('current-value'); // current value on screen
 
-let resetValue = document.getElementsByClassName('result-value')[0];
+let inputState = true; // true when the user already inputs , false when not
+
+
+let numberKeys = document.getElementsByClassName('numbers') //keys that hold number values
+
+// Screen styling :
+function defaultFormat(numb){
+    if(numb.includes('e')){
+        return numb
+    }
+    else{
+        return numb.replace(/,/g,'')
+    }
+    
+}
+function commaFormat(numb){
+    if(numb === 'Infinity'){
+        return numb
+    }
+    if(numb.includes('e')){
+        return numb
+    }else{
+        const numbDefault = Number(defaultFormat(numb));
+        return numbDefault.toLocaleString('en-US')
+    }
+        
+
+}
+
+
+// show typed operation on screen :
+// helper Function
+
+
+function showOnScreen(e) {
+    if(resultScreen.innerHTML.length >= 22 && inputState){
+        return
+    }
+
+    if(resultScreen.innerHTML === 'Infinity'){
+        return
+    }
+    if (e.target.value === '.') { // prevent more than 1 dot
+        if (resultScreen.innerHTML.includes('.')) {
+            return
+        }
+    }
+    if (resultScreen.innerHTML[0] == '0') { //replacing the zero if only zero in screen
+        resultScreen.innerHTML = e.target.value
+    } else {
+        if (!inputState) {
+            resultScreen.innerHTML = e.target.value
+        } else {
+            resultScreen.innerHTML += e.target.value
+        }
+    }
+    if(!resultScreen.innerHTML.includes('.')){
+        resultScreen.innerHTML = commaFormat(resultScreen.innerHTML)
+    } else{
+        resultScreen.innerHTML = defaultFormat(resultScreen.innerHTML)
+    }
+    
+    inputState = true;
+}
+// show the numbers and the dot , operators not includes since they will do diffirent behaviour on the screen
+for (numberkey of numberKeys) {
+    numberkey.addEventListener('click', showOnScreen)
+}
+
+// use delete button and reset :
+
+btnDel.addEventListener('click', (e) => {
+    if (inputState) {
+        if (resultScreen.innerHTML.length === 1) {
+            resultScreen.innerHTML = 0;
+        } else {
+            resultScreen.innerHTML = resultScreen.innerHTML.slice(0, -1)
+        }
+    }
+})
+
+btnReset.addEventListener('click', () => { //reset
+    resultScreen.innerHTML = 0;
+    equationScreen.innerHTML = '';
+    detailedBoard = false;
+})
+btnReset.onkeydown = (e) =>{e.preventDefault()}
+
+// Operators Behaviour :
+
+// showing and using the operators:
+let plus = document.getElementById('key-+');
+let minus = document.getElementById('key--');
+let multiply = document.getElementById('key-*');
+let divide = document.getElementById('key-/');
+let equal = document.getElementById('key-Enter');
+
+const operators = [plus, minus, multiply, divide];
+
+function operations(term1, term2, op) { //helper function that do the calculation: term1 <operator> term2
+    switch (op) {
+        case '+':
+            return term1 + term2;
+            break;
+        case '-':
+            return term1 - term2;
+            break;
+        case '×':
+            return term2 * term1;
+            break;
+        case '÷':
+            if(term2 == 0){
+                return 'Infinity'
+            }else{
+                return term1 / term2;
+            }
+            
+            break;
+    }
+}
+
+
+// Simple Mode function : 
+
+function simpleMode(e) { //doing the calculations on simple mode
+    if(resultScreen.innerHTML === 'Infinity'){
+        return
+    }
+    if (equationScreen.innerHTML.length === 0 || equationScreen.innerHTML.slice(-1) === '=') {
+        equationScreen.innerHTML = defaultFormat(resultScreen.innerHTML) + e.target.value;
+        inputState = false
+        return
+    }
+    if (!inputState) { // when we have only term 1 and hitting an operator , we just change the operator
+        equationScreen.innerHTML = equationScreen.innerHTML.slice(0, -1) + e.target.value;
+
+    } else { // when we have
+        const term1 = equationScreen.innerHTML.slice(0, -1);
+        const term2 = defaultFormat(resultScreen.innerHTML)
+        const calculationOperator = equationScreen.innerHTML.slice(-1);
+        const result = operations(Number(term1), Number(term2), calculationOperator);
+        equationScreen.innerHTML = result + e.target.value;
+    }
+    inputState = false
+}
+
+// Equation Mode :
+
+function equationMode() {
+    if(resultScreen.innerHTML === 'Infinity'){
+        return
+    }
+    if (equationScreen.innerHTML.length === 0) {
+        equationScreen.innerHTML = defaultFormat(resultScreen.innerHTML) + '=';
+        inputState = false;
+        return
+    }
+    if (equationScreen.innerHTML.slice(-1) !== '=') {
+        const term1 = equationScreen.innerHTML.slice(0, -1);
+        const term2 = defaultFormat(resultScreen.innerHTML)
+        const calculationOperator = equationScreen.innerHTML.slice(-1);
+        const result = operations(Number(term1), Number(term2), calculationOperator);
+        equationScreen.innerHTML = `${term1} ${calculationOperator} ${term2} =`;
+        resultScreen.innerHTML = commaFormat(result.toString());
+        inputState = false;
+    } else {
+        if (equationScreen.innerHTML.split(' ').length < 2) {
+            equationScreen.innerHTML = defaultFormat(resultScreen.innerHTML) + '=';
+            inputState = false;
+            return
+        } else {
+            const equation = equationScreen.innerHTML.split(' ');
+            const term1 = equation[0];
+            const term2 = equation[2];
+            const calculationOperator = equation[1];
+            const result = operations(Number(defaultFormat(resultScreen.innerHTML)), Number(term2), calculationOperator);
+            equationScreen.innerHTML = `${defaultFormat(resultScreen.innerHTML)} ${calculationOperator} ${term2} =`;
+
+            resultScreen.innerHTML = commaFormat(result.toString());
+
+            
+            
+            inputState = false;
+        }
+    }
+}
+
+for (operator of operators) {
+    operator.addEventListener('click', simpleMode)
+}
+
+equal.addEventListener('click', equationMode)
+
+
+
+
+
+
+
 

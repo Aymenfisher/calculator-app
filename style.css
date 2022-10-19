@@ -79,6 +79,10 @@ main{
     gap: 5%;
 }
 
+button{
+    user-select: none;
+    outline: 0;
+}
 button:hover{
     cursor: pointer;
     filter: brightness(1.2);
@@ -149,14 +153,24 @@ button:hover{
 /* result screen */
 .result{
     border-radius: 10px;
+    text-align: right;
     background-color: var(--theme-1-screen-bg);
-    display: flex;
-    justify-content: flex-end;
+    display: grid;
+    grid-template: 25% 70% / 1fr;
+    gap: 5%;
     align-items: center;
-    font-size: 2rem;
+    justify-content: end;
     color: var(--theme-1-text-white);
     padding-left: 20px;
     padding-right: 20px;
+}
+
+#previous-result{
+    font-size: 1rem;
+}
+#current-value{
+    font-size: 2rem;
+    overflow: hidden;
 }
 
 /* Keypad */
