@@ -99,6 +99,9 @@ let btnReset = document.getElementById('key-reset');
 let btnEqual = document.getElementById('key-Enter');
 
 themeButton.addEventListener('keydown',(e) => {e.preventDefault()})
+// Footer colors:
+const footer = document.getElementById('footer');
+const footerAnchors = document.querySelectorAll('footer a')
 
 // Change Theme event Handler :
 // helper function that only changes the styles
@@ -113,6 +116,7 @@ const changeStyles = (nextTheme) => {
 
     resultPannel.style.backgroundColor = themes[nextTheme - 1].resultBg;
     resultPannel.style.color = themes[nextTheme - 1].resultColor;
+    footer.style.color = themes[nextTheme - 1].resultColor;
 
     keypad.style.backgroundColor = themes[nextTheme - 1].keypadBg;
 
@@ -134,6 +138,9 @@ const changeStyles = (nextTheme) => {
     btnEqual.style.color = themes[nextTheme - 1].buttonEqualColor;
     btnEqual.style.backgroundColor = themes[nextTheme - 1].buttonEqualBg;
     btnEqual.style.boxShadow = themes[nextTheme - 1].buttonEqualBoxShadow;
+    for(anchor of footerAnchors){
+        anchor.style.color = themes[nextTheme - 1].buttonEqualBg;
+    }
 }
 
 // the event handler that changes the theme
@@ -150,6 +157,9 @@ function changeTheme(e) {
 }
 
 themeRail.addEventListener('click',changeTheme)
+
+
+
 //------------------- end Themes Change --------------//
 ///////////////////////////////////////////////////////////////////////////////////////////
 
@@ -310,6 +320,7 @@ function simpleMode(e) { //doing the calculations on simple mode
         const calculationOperator = equationScreen.innerHTML.slice(-1);
         const result = operations(Number(term1), Number(term2), calculationOperator);
         equationScreen.innerHTML = result + e.target.value;
+        resultScreen.innerHTML = commaFormat(result.toString())
     }
     inputState = false
 }

@@ -60,22 +60,22 @@ html,body{
 }
 
 body{
-    width: 100vw;
-    height: 100vh;
     background-color: var(--theme-1-main-bg);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 20px;
+    transition: background-color 500ms ease-in;
 }
 
 main{
     max-width: 500px;
-    width: 70%;
     max-height: 600px;
+    width: 70%;
     height: 80%;
     display: grid;
-    grid-template: 1fr 20% 70% / 1fr;
+    grid-template: 10% 20% 60% / 1fr;
     gap: 5%;
 }
 
@@ -90,7 +90,6 @@ button:hover{
 
 /* Header */
 .header{
-    height: 100%;
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
@@ -103,12 +102,13 @@ button:hover{
 
 
 .theme-container{
-    width: 40%;
+    width: max(150px,40%);
     display: grid;
     grid-template: 1fr 1fr / 1fr 1fr;
 }
 
 .theme{
+    font-size: 1rem;
     letter-spacing: 1px;
     justify-self: center;
     font-size: .8rem;
@@ -119,6 +119,7 @@ button:hover{
 
 
 .theme-numbers{
+    font-size: 1rem;
     align-self: end;
     grid-row: 1 / span 1;
     grid-column: 2 /span 1;
@@ -136,6 +137,7 @@ button:hover{
     border-radius: 20px;
     display: flex;
     justify-content: flex-start;
+    transition: justify-content 1s ease-in;
 }
 
 .theme-rail:hover{
@@ -214,8 +216,31 @@ button:hover{
 }
 
 footer { 
-    position: fixed;
-    bottom: 5px;
-    left: 10px;
-    font-size: 1rem;
+    justify-self: flex-end;
+    font-size: clamp(10px,2vw,16px);
+    color: var(--theme-1-text-white);
+}
+footer a{
+    color: var(--theme-1-key-red-bg);
+}
+
+
+@media screen and (max-width:440px){
+    html{
+        font-size: 14px;
+    }
+    main{
+        max-height: 500px;
+    }
+    .keypad{
+        padding: 15px;
+        gap: 4%;
+    }
+    #previous-result{
+        font-size: 1rem;
+    }
+    #current-value{
+        font-size: 1.5rem;
+        overflow: hidden;
+    }
 }
